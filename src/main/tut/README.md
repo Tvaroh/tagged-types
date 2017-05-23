@@ -5,7 +5,6 @@
 Zero-dependency boilerplate-free tagged types for Scala.
 
 - [tagged-types](#tagged-types)
-   - [Why type-tagging](#why-type-tagging)
    - [Usage](#usage)
      - [`sbt`](#sbt)
      - [API](#api)
@@ -17,10 +16,6 @@ Zero-dependency boilerplate-free tagged types for Scala.
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
 
-## Why type-tagging
-
-The High Cost of AnyVal subclasses https://failex.blogspot.com.by/2017/04/the-high-cost-of-anyval-subclasses.html
-
 ## Usage
 
 ### `sbt`
@@ -30,7 +25,7 @@ Add the following to your `build.sbt`:
 ```scala
 resolvers += Resolver.bintrayRepo("treevio", "maven")
 
-libraryDependencies += "io.treev" %% "tagged-types" % "1.1"
+libraryDependencies += "io.treev" %% "tagged-types" % "1.2"
 ```
 
 Artifacts are published both for Scala `2.11` and `2.12`.
@@ -39,7 +34,7 @@ Artifacts are published both for Scala `2.11` and `2.12`.
 
 #### Defining tagged types
 
-```scala
+```tut:silent
 import io.treev.tag._
 
 object Username extends TaggedType[String]
@@ -59,7 +54,7 @@ package object model {
 * `Tag` trait to access the tag, e.g. `List("scooper").@@@[Username.Tag]` (see below for container tagging);
 * `Raw` type member to access raw type, e.g. to help with type inference where needed:
 
-```scala
+```tut:silent
 object Username extends TaggedType[String]
 type Username = Username.Type
 
@@ -75,7 +70,7 @@ users.sortBy(_.name: Username.Raw)
 
 ##### Tagging values
 
-```scala
+```tut:silent
 sealed trait UsernameTag
 
 val username = "scooper".@@[UsernameTag]
@@ -85,7 +80,7 @@ val username = "scooper".@@[UsernameTag]
 
 Or, if you have `TaggedType` instance:
 
-```scala
+```tut:silent
 object Username extends TaggedType[String]
 
 val username = "scooper" @@ Username 
@@ -96,7 +91,7 @@ val username = "scooper" @@ Username
 
 ##### Tagging container values
 
-```scala
+```tut:silent
 val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
 val users = rawUsers.@@@[UsernameTag]
 // or val users = rawUsers.taggedWithF[UsernameTag]
@@ -107,7 +102,7 @@ Can also tag using `TaggedType` instance as above.
 
 ##### Adding more tags
 
-```scala
+```tut:silent
 sealed trait OwnerTag
 
 val username = "scooper".@@[UsernameTag]
@@ -118,7 +113,7 @@ val owner: String @@ (UsernameTag with OwnerTag) = username.+@[OwnerTag]
 
 Need explicit type specification above due to *"cyclic aliasing or subtyping involving type @@"* compiler error otherwise.
 
-```scala
+```tut:silent
 val owners = users.+@@[OwnerTag]
 // or val owners = users.andTaggedWithF[OwnerTag]
 // owners: List[String @@ (UsernameTag with OwnerTag)]
@@ -130,7 +125,7 @@ Can also tag using `TaggedType` instance as above.
 
 Suppose you have a value class:
 
-```scala
+```tut:silent
 case class Username(value: String) extends AnyVal {
   def isValid: Boolean = ???
 }
@@ -143,13 +138,13 @@ object Username {
 
 Then, it's a matter of changing it to:
 
-```scala
+```tut:silent
 object Username extends TaggedType[String]
 ```
 
 Any methods on original case class instance turn into implicit extensions:
 
-```scala
+```tut:silent
 object Username extends TaggedType[String] {
   implicit class UsernameExtensions(val value: Type) 
     extends AnyVal { // still good application of value classes
@@ -161,7 +156,7 @@ object Username extends TaggedType[String] {
 
 Any constants on original case class' companion object are merged into `Username` object:
 
-```scala
+```tut:silent
 object Username extends TaggedType[String] {
   val FieldName: String = ???
   
@@ -173,7 +168,7 @@ object Username extends TaggedType[String] {
 
 Implicit resolution won't work as previously, so, to bring implicit `Ordering` instance from above into scope, need to import it explicitly:
 
-```scala
+```tut:silent
 import Username._
 // or import Username.ordering
 ```

@@ -32,3 +32,7 @@ bintrayPackage := "tagged-types"
 bintrayVcsUrl := Some("git:git@github.com:Treev-io/tagged-types.git")
 bintrayReleaseOnPublish in ThisBuild := false
 bintrayPackageLabels := Seq("scala", "tagged", "tagged-types")
+
+enablePlugins(TutPlugin)
+scalacOptions in Tut --= Seq("-Xlint", "-Ywarn-dead-code", "-Ywarn-unused-import")
+tutTargetDirectory := baseDirectory.value
