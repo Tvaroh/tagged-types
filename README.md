@@ -97,3 +97,57 @@ val owners = users.+@@[OwnerTag]
 // or val owners = users.andTaggedWithF[OwnerTag]
 // owners: List[String @@ (UsernameTag with OwnerTag)]
 ```
+
+### Migrating from value classes
+
+Suppose you have a value class:
+
+```scala
+case class Username(value: String) extends AnyVal {
+  def isValid: Boolean = ???
+}
+object Username {
+  val FieldName: String = ???
+  
+  implicit val ordering: Ordering[Username] = ???
+}
+```
+
+Then, it's a matter of changing it to:
+
+```
+import io.treev.tag._
+
+object Username extends TaggedType[String]
+```
+
+Any methods on original case class instance turn into implicit extensions:
+
+```scala
+object Username extends TaggedType[String] {
+  implicit class UsernameExtensions(val value: Type) 
+    extends AnyVal { // still good application of value classes
+  
+    def isValid: Boolean = ???
+  }
+}
+```
+
+Any constants on original case class' companion object are merged into `Username` object:
+
+```scala
+object Username extends TaggedType[String] {
+  val FieldName: String = ???
+  
+  implicit val ordering: Ordering[Username] = ???
+}
+```
+
+#### Note about implicit resolution
+
+Implicit resolution won't work as previously, so, to bring implicit `Ordering` instance from above into scope, need to import it explicitly:
+
+```scala
+import Username._
+// or import Username.ordering
+```
