@@ -24,6 +24,13 @@ object tag {
 
     /** Synonym operator for `taggedWith`. */
     def @@[U]: T @@ U = taggedWith[U]
+
+    /** Type tag using `TaggedType` instance.
+      * Allows for `String @@ MyTaggedType` syntax. */
+    def taggedWith[U](taggedType: TaggedType[U]): T @@ taggedType.Tag = taggedWith[taggedType.Tag]
+
+    /** Synonym operator for `taggedWith`. */
+    def @@[U](taggedType: TaggedType[U]): T @@ taggedType.Tag = taggedWith[taggedType.Tag]
   }
   implicit class AndTaggingExtensions[T, U](val t: T @@ U) extends AnyVal {
     /** Tag tagged value with type `V`.

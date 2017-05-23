@@ -57,16 +57,30 @@ import io.treev.tag._
 
 sealed trait UsernameTag
 
-val usernameString = "scooper"
-val username = usernameString.@@[UsernameTag] // or .taggedWith[UsernameTag]
+val username = "scooper".@@[UsernameTag]
+// or val username = "scooper".taggedWith[UsernameTag]
 // username: String @@ UsernameTag
+```
+
+Or, if you have `TaggedType` instance:
+
+```scala
+import io.treev.tag._
+
+object Username extends TaggedType[String]
+
+val username = "scooper" @@ Username 
+// or val username = "scooper" taggedWith Username
+// or val username = Username("scooper")
+// username: String @@ Username.Tag
 ```
 
 ##### Tagging container values
 
 ```scala
 val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
-val users = rawUsers.@@@[UsernameTag] // or .taggedWithF[UsernameTag]
+val users = rawUsers.@@@[UsernameTag]
+// or val users = rawUsers.taggedWithF[UsernameTag]
 // users: List[String @@ UsernameTag]
 ```
 
@@ -75,9 +89,11 @@ val users = rawUsers.@@@[UsernameTag] // or .taggedWithF[UsernameTag]
 ```scala
 sealed trait OwnerTag
 
-val owner = username.+@[OwnerTag] // or .andTaggedWith[OwnerTag]
+val owner = username.+@[OwnerTag]
+// or val owner = username.andTaggedWith[OwnerTag]
 // owner: String @@ (UsernameTag with OwnerTag)
 
-val owners = users.+@@[OwnerTag] // or .andTaggedWithF[OwnerTag]
+val owners = users.+@@[OwnerTag]
+// or val owners = users.andTaggedWithF[OwnerTag]
 // owners: List[String @@ (UsernameTag with OwnerTag)]
 ```
