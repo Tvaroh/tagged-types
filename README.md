@@ -5,6 +5,7 @@
 Zero-dependency boilerplate-free tagged types for Scala.
 
 - [tagged-types](#tagged-types)
+   - [Why type-tagging](#why-type-tagging)
    - [Usage](#usage)
      - [`sbt`](#sbt)
      - [API](#api)
@@ -15,6 +16,10 @@ Zero-dependency boilerplate-free tagged types for Scala.
          - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
+
+## Why type-tagging
+
+The High Cost of AnyVal subclasses https://failex.blogspot.com.by/2017/04/the-high-cost-of-anyval-subclasses.html
 
 ## Usage
 
