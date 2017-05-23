@@ -32,3 +32,4 @@ bintrayRepository := "maven"
 bintrayPackage := "tagged-types"
 bintrayVcsUrl := Some("git:git@github.com:Treev-io/tagged-types.git")
 bintrayReleaseOnPublish in ThisBuild := false
+bintrayPackageLabels := Seq("scala", "tagged", "tagged-types")
