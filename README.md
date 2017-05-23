@@ -46,7 +46,7 @@ import io.treev.tag._
 sealed trait UsernameTag
 
 val usernameString = "scooper"
-val username = "scooper".@@[UsernameTag] // or .taggedWith[UsernameTag]
+val username = usernameString.@@[UsernameTag] // or .taggedWith[UsernameTag]
 // username: String @@ UsernameTag
 ```
 
