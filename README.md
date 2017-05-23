@@ -6,7 +6,6 @@
 Zero-dependency boilerplate-free tagged types for Scala.
 
 - [tagged-types](#tagged-types)
-   - [Why type-tagging](#why-type-tagging)
    - [Usage](#usage)
      - [`sbt`](#sbt)
      - [API](#api)
@@ -18,10 +17,6 @@ Zero-dependency boilerplate-free tagged types for Scala.
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
 
-## Why type-tagging
-
-The High Cost of AnyVal subclasses https://failex.blogspot.com.by/2017/04/the-high-cost-of-anyval-subclasses.html
-
 ## Usage
 
 ### `sbt`
@@ -31,7 +26,7 @@ Add the following to your `build.sbt`:
 ```scala
 resolvers += Resolver.bintrayRepo("treevio", "maven")
 
-libraryDependencies += "io.treev" %% "tagged-types" % "1.1"
+libraryDependencies += "io.treev" %% "tagged-types" % "1.2"
 ```
 
 Artifacts are published both for Scala `2.11` and `2.12`.
