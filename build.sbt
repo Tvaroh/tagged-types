@@ -25,7 +25,6 @@ scalacOptions ++= Seq(
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
 publishMavenStyle := true
-releaseCrossBuild := true
 
 bintrayOrganization := Some("treevio")
 bintrayRepository := "maven"
