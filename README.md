@@ -2,7 +2,7 @@
 
 [ ![Download](https://api.bintray.com/packages/treevio/maven/tagged-types/images/download.svg) ](https://bintray.com/treevio/maven/tagged-types/_latestVersion)
 
-Zero-dependency tagged types for Scala.
+Zero-dependency boilerplate-free tagged types for Scala.
 
 - [tagged-types](#tagged-types)
    - [Usage](#usage)
@@ -13,8 +13,8 @@ Zero-dependency tagged types for Scala.
          - [Tagging values](#tagging-values)
          - [Tagging container values](#tagging-container-values)
          - [Adding more tags](#adding-more-tags)
-     - [Migrating from value classes](#migrating-from-value-classes)
-       - [Note about implicit resolution](#note-about-implicit-resolution)
+   - [Migrating from value classes](#migrating-from-value-classes)
+     - [Note about implicit resolution](#note-about-implicit-resolution)
 
 ## Usage
 
@@ -112,7 +112,7 @@ val owners = users.+@@[OwnerTag]
 // owners: List[String @@ (UsernameTag with OwnerTag)]
 ```
 
-### Migrating from value classes
+## Migrating from value classes
 
 Suppose you have a value class:
 
@@ -157,7 +157,7 @@ object Username extends TaggedType[String] {
 }
 ```
 
-#### Note about implicit resolution
+### Note about implicit resolution
 
 Implicit resolution won't work as previously, so, to bring implicit `Ordering` instance from above into scope, need to import it explicitly:
 
