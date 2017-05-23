@@ -1,6 +1,6 @@
 # tagged-types
 
-Zero dependency tagged types for Scala.
+Zero-dependency tagged types for Scala.
 
 ## Usage
 
@@ -26,7 +26,7 @@ import io.treev.tag._
 object Username extends TaggedType[String]
 ```
 
-For convenience define a type alias in package object (Scala `2.12` only):
+For convenience define a type alias in package object (Scala `2.12` only, with `2.11` type synonym name and object name must differ):
 
 ```scala
 package object model {
@@ -66,6 +66,6 @@ sealed trait OwnerTag
 val owner = username.+@[OwnerTag] // or .andTaggedWith[OwnerTag]
 // owner: String @@ (UsernameTag with OwnerTag)
 
-val owners = users.+@@[OwnerTag]
+val owners = users.+@@[OwnerTag] // or .andTaggedWithF[OwnerTag]
 // owners: List[String @@ (UsernameTag with OwnerTag)]
 ```
