@@ -1,5 +1,7 @@
 # tagged-types
 
+[ ![Download](https://api.bintray.com/packages/treevio/maven/tagged-types/images/download.svg) ](https://bintray.com/treevio/maven/tagged-types/_latestVersion)
+
 Zero-dependency tagged types for Scala.
 
 ## Usage
