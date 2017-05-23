@@ -4,6 +4,18 @@
 
 Zero-dependency tagged types for Scala.
 
+- [tagged-types](#tagged-types)
+   - [Usage](#usage)
+     - [`sbt`](#sbt)
+     - [API](#api)
+       - [Defining tagged types](#defining-tagged-types)
+       - [Tagging](#tagging)
+         - [Tagging values](#tagging-values)
+         - [Tagging container values](#tagging-container-values)
+         - [Adding more tags](#adding-more-tags)
+     - [Migrating from value classes](#migrating-from-value-classes)
+       - [Note about implicit resolution](#note-about-implicit-resolution)
+
 ## Usage
 
 ### `sbt`
@@ -13,7 +25,7 @@ Add the following to your `build.sbt`:
 ```scala
 resolvers += Resolver.bintrayRepo("treevio", "maven")
 
-libraryDependencies += "io.treev" %% "tagged-types" % "1.0"
+libraryDependencies += "io.treev" %% "tagged-types" % "1.1"
 ```
 
 Artifacts are published both for Scala `2.11` and `2.12`.
