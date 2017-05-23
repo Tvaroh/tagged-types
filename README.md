@@ -34,7 +34,19 @@ package object model {
 }
 ```
 
-`TaggedType` provides `apply` method to construct tagged type from raw values, `Tag` trait to access the tag, `Raw` and `Type` type members to access raw type and tagged type accordingly.
+`TaggedType` provides the following members:
+
+* `apply` method to construct tagged type from raw values, e.g. `Username("scooper")`;
+* `Tag` trait to access the tag, e.g. `List("scooper").@@@[Username.Tag]` (see below for container tagging);
+* `Raw` type member to access raw type, e.g. to help with type inference where needed:
+
+    ```scala
+    case class User(name: Username)
+    val users = List(User(Username("scooper")))
+    users.sortBy(_.name: Username.Raw)
+    ```
+
+* `Type` type member to access tagged type.
 
 #### Tagging
 
