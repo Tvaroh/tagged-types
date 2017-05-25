@@ -16,6 +16,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
          - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
+   - [Credits](#credits)
 
 ## Usage
 
@@ -170,9 +171,14 @@ object Username extends TaggedType[String] {
 
 ### Note about implicit resolution
 
-Implicit resolution won't work as previously, so, to bring implicit `Ordering` instance from above into scope, need to import it explicitly:
+Implicit resolution won't work as before with companion objects, so, to bring implicit `Ordering` instance or `UsernameExtensions` from above into scope, need to import it explicitly:
 
 ```scala
 import Username._
 // or import Username.ordering
+// or import Username.UsernameExtensions
 ```
+
+## Credits
+
+Implementation is based on Softwaremill's [scala-commons](https://github.com/softwaremill/scala-common) tagging module code.
