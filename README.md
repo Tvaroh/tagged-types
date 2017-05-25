@@ -26,7 +26,7 @@ Add the following to your `build.sbt`:
 ```scala
 resolvers += Resolver.bintrayRepo("treevio", "maven")
 
-libraryDependencies += "io.treev" %% "tagged-types" % "1.2.2"
+libraryDependencies += "io.treev" %% "tagged-types" % "1.3"
 ```
 
 Artifacts are published both for Scala `2.11` and `2.12`.
