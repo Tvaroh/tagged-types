@@ -2,6 +2,7 @@ import sbt._
 
 name := "tagged-types"
 organization in ThisBuild := "io.treev"
+description := "Zero-dependency boilerplate-free tagged types for Scala"
 
 scalaVersion := "2.12.2"
 crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
@@ -25,6 +26,14 @@ scalacOptions ++= Seq(
 )
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/Treev-io/tagged-types"),
+    "scm:git:git@github.com:Treev-io/tagged-types.git",
+    Some("scm:git:ssh://github.com:Treev-io/tagged-types.git")
+  )
+)
+developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh"))
 publishMavenStyle := true
 
 bintrayOrganization := Some("treevio")
