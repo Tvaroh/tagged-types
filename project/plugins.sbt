@@ -1,3 +1,5 @@
 addSbtPlugin("io.get-coursier" % "sbt-coursier" % "1.0.0-RC3")
 addSbtPlugin("me.lessis" % "bintray-sbt" % "0.3.0")
 addSbtPlugin("org.tpolecat" % "tut-plugin" % "0.5.2")
+addSbtPlugin("com.github.gseitz" % "sbt-release" % "1.0.5")
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.1")
