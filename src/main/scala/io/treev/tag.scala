@@ -7,8 +7,8 @@ package io.treev
   */
 object tag {
 
-  type Tag[+U] = { type Tag <: U }
-  type Tagged[+T, +U] = T with Tag[U]
+  type Tag[+T, +U] = { type Raw <: T; type Tag <: U }
+  type Tagged[+T, +U] = T with Tag[T, U]
   type @@[+T, +U] = Tagged[T, U]
 
   /** Base tagged type trait.

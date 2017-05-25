@@ -101,16 +101,18 @@ Can also tag using `TaggedType` instance as above.
 
 ##### Adding more tags
 
+Immediate value:
+
 ```tut:silent
 sealed trait OwnerTag
 
 val username = "scooper".@@[UsernameTag]
-val owner: String @@ (UsernameTag with OwnerTag) = username.+@[OwnerTag]
-// or val owner: String @@ (UsernameTag with OwnerTag) = username.andTaggedWith[OwnerTag]
+val owner = username.+@[OwnerTag]
+// or val owner = username.andTaggedWith[OwnerTag]
 // owner: String @@ (UsernameTag with OwnerTag)
 ```
 
-Need explicit type specification above due to *"cyclic aliasing or subtyping involving type @@"* compiler error otherwise.
+Container value:
 
 ```tut:silent
 val owners = users.+@@[OwnerTag]
