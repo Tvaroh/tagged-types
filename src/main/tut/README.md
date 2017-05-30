@@ -41,10 +41,11 @@ import io.treev.tag._
 object username extends TaggedType[String]
 ```
 
-It's helpful to define a type alias for convenience:
+It's helpful to define a type alias for convenience, e.g. in package object:
 
 ```tut:silent
-object username extends TaggedType[String] { type Username = Type }
+object username extends TaggedType[String]
+type Username = username.Type
 ```
 
 `TaggedType` provides the following members:
@@ -54,9 +55,9 @@ object username extends TaggedType[String] { type Username = Type }
 * `Raw` type member to access raw type, e.g. to help with type inference where needed:
 
 ```tut:silent
-object username extends TaggedType[String] { type Username = Type }
+object username extends TaggedType[String]
+type Username = username.Type
 
-import username.Username
 case class User(name: Username)
 
 val users = List(User(username("scooper")))
