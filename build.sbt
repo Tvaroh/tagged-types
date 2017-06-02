@@ -1,12 +1,11 @@
 import sbt._
 
-name := "tagged-types"
 organization in ThisBuild := "io.treev"
-description := "Zero-dependency boilerplate-free tagged types for Scala"
+description in ThisBuild := "Zero-dependency boilerplate-free tagged types for Scala"
 
-scalaVersion := "2.12.2"
-crossScalaVersions := Seq(scalaVersion.value, "2.11.11")
-scalacOptions ++= Seq(
+scalaVersion in ThisBuild := "2.12.2"
+crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.11")
+scalacOptions in ThisBuild ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
@@ -16,12 +15,29 @@ scalacOptions ++= Seq(
   "-language:implicitConversions",
   "-Xfatal-warnings",
   "-Yno-adapted-args",
-  "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture",
   "-Ywarn-unused-import"
 )
+
+lazy val root =
+  project.in(file("."))
+    .aggregate(jvm, js)
+    .settings(
+      publish := {},
+      publishLocal := {}
+    )
+
+lazy val cross =
+  crossProject.in(file("."))
+    .settings(
+      name := "tagged-types",
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.3" % Test
+    )
+
+lazy val jvm = cross.jvm
+lazy val js = cross.js
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))
 scmInfo := Some(
@@ -32,20 +48,11 @@ scmInfo := Some(
   )
 )
 developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh"))
+homepage := Some(url("https://github.com/Treev-io/tagged-types"))
 
 publishMavenStyle := true
+publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging)
 pomIncludeRepository := (_ => false)
-homepage := Some(url("https://github.com/Treev-io/tagged-types"))
+
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
-
-bintrayOrganization := Some("treevio")
-bintrayRepository := "maven"
-bintrayPackage := "tagged-types"
-bintrayVcsUrl := Some("git:git@github.com:Treev-io/tagged-types.git")
-bintrayReleaseOnPublish in ThisBuild := false
-bintrayPackageLabels := Seq("scala", "tagged", "tagged-types")
-
-enablePlugins(TutPlugin)
-scalacOptions in Tut --= Seq("-Xlint", "-Ywarn-dead-code", "-Ywarn-unused-import")
-tutTargetDirectory := baseDirectory.value
