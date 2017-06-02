@@ -17,6 +17,7 @@ scalacOptions in ThisBuild ++= Seq(
   "-Xfuture",
   "-Ywarn-unused-import"
 )
+releaseCrossBuild := true
 
 lazy val root =
   project.in(file("."))
@@ -34,7 +35,6 @@ lazy val cross =
       organization := "io.treev",
       description := "Zero-dependency boilerplate-free tagged types for Scala",
 
-      releaseCrossBuild := true,
       releasePublishArtifactsAction := PgpKeys.publishSigned.value,
 
       publishMavenStyle := true,
