@@ -15,14 +15,12 @@ scalacOptions ++= Seq(
   "-language:higherKinds",
   "-language:implicitConversions",
   "-Xfatal-warnings",
-  "-Xlint",
   "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
   "-Xfuture",
-  "-Ywarn-unused-import",
-  "-Yno-predef"
+  "-Ywarn-unused-import"
 )
 
 licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause"))

@@ -13,6 +13,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
        - [Tagging](#tagging)
          - [Tagging values](#tagging-values)
          - [Tagging container values](#tagging-container-values)
+         - [Tagging arbitrarily nested container values](#tagging-arbitrarily-nested-container-values)
          - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
@@ -74,8 +75,8 @@ users.sortBy(_.name: username.Raw)
 sealed trait UsernameTag
 
 val sheldon = "scooper".@@[UsernameTag]
-// or val sheldon = "scooper".taggedWith[UsernameTag]
-// sheldon: String @@ UsernameTag
+sheldon: String @@ UsernameTag
+// or "scooper".taggedWith[UsernameTag]
 ```
 
 Or, if you have `TaggedType` instance:
@@ -83,10 +84,11 @@ Or, if you have `TaggedType` instance:
 ```tut:silent
 object username extends TaggedType[String]
 
-val sheldon = "scooper" @@ username 
-// or val sheldon = "scooper" taggedWith username
-// or val sheldon = username("scooper")
-// sheldon: String @@ username.Tag
+val sheldon = "scooper" @@ username
+sheldon: String @@ username.Tag
+sheldon: username.Type
+// or "scooper" taggedWith username
+// or username("scooper")
 ```
 
 ##### Tagging container values
@@ -94,8 +96,20 @@ val sheldon = "scooper" @@ username
 ```tut:silent
 val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
 val users = rawUsers.@@@[UsernameTag]
-// or val users = rawUsers.taggedWithF[UsernameTag]
-// users: List[String @@ UsernameTag]
+users: List[String @@ UsernameTag]
+// or rawUsers.taggedWithF[UsernameTag]
+```
+
+Can also tag using `TaggedType` instance as above.
+
+##### Tagging arbitrarily nested container values
+
+```tut:silent
+import scala.util.Try
+val arbitrarilyNested = Some(List(Try("scooper"), Try("lhofstadter"), Try("rkoothrappali")))
+val taggedArbitrarilyNested = arbitrarilyNested.@@@@[UsernameTag]
+taggedArbitrarilyNested: Option[List[Try[String @@ UsernameTag]]]
+// or arbitrarilyNested.taggedWithG[UsernameTag]
 ```
 
 Can also tag using `TaggedType` instance as above.
@@ -109,16 +123,24 @@ sealed trait OwnerTag
 
 val username = "scooper".@@[UsernameTag]
 val owner = username.+@[OwnerTag]
-// or val owner = username.andTaggedWith[OwnerTag]
-// owner: String @@ (UsernameTag with OwnerTag)
+owner: String @@ (UsernameTag with OwnerTag)
+// or username.andTaggedWith[OwnerTag]
 ```
 
 Container value:
 
 ```tut:silent
 val owners = users.+@@[OwnerTag]
-// or val owners = users.andTaggedWithF[OwnerTag]
-// owners: List[String @@ (UsernameTag with OwnerTag)]
+owners: List[String @@ (UsernameTag with OwnerTag)]
+// or users.andTaggedWithF[OwnerTag]
+```
+
+Arbitrarily nested container value:
+
+```tut:silent
+val owners = taggedArbitrarilyNested.+@@@[OwnerTag]
+owners: Option[List[Try[String @@ (UsernameTag with OwnerTag)]]]
+// or taggedArbitrarilyNested.andTaggedWithG[OwnerTag]:
 ```
 
 Can also tag using `TaggedType` instance as above.
