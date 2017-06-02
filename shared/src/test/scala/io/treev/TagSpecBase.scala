@@ -70,7 +70,7 @@ abstract class TagSpecBase extends FlatSpec {
     val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
     val users = rawUsers.@@@[UsernameTag]
     assertCompiles("users: List[String @@ UsernameTag]")
-    assertDoesNotCompile("useres: List[String @@ OwnerTag]")
+    assertDoesNotCompile("users: List[String @@ OwnerTag]")
   }
 
   it should "support intra-container value multi-tagging" in {
@@ -124,7 +124,7 @@ abstract class TagSpecBase extends FlatSpec {
     val rawUsers = List(Some(List("scooper", "lhofstadter", "rkoothrappali")))
     val users = rawUsers.@@@@[UsernameTag]
     assertCompiles("users: List[Option[List[String @@ UsernameTag]]]")
-    assertDoesNotCompile("useres: List[Option[List[String @@ OwnerTag]]]")
+    assertDoesNotCompile("users: List[Option[List[String @@ OwnerTag]]]")
   }
 
   it should "support arbitrarily nested intra-container value multi-tagging" in {
