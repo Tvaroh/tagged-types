@@ -25,8 +25,6 @@ Zero-dependency boilerplate-free tagged types for Scala.
 Add the following to your `build.sbt`:
 
 ```scala
-resolvers += Resolver.bintrayRepo("treevio", "maven")
-
 libraryDependencies += "io.treev" %% "tagged-types" % "1.4"
 ```
 
