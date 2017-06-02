@@ -53,6 +53,12 @@ abstract class TagSpecBase extends FlatSpec {
   it should "support value multi-tagging with TaggedType instance" in {
     val scooper = "scooper" @@ Username
     val owner = scooper +@ Owner
+    assertCompiles("owner: String")
+    assertCompiles("owner: String @@ Username.Tag")
+    assertCompiles("owner: String @@ Owner.Tag")
+    assertCompiles("owner: String @@ (Username.Tag with Owner.Tag)")
+    assertDoesNotCompile("owner: String @@ Admin.Tag")
+
     val admin = owner +@ Admin
     assertCompiles("admin: String")
     assertCompiles("admin: String @@ Username.Tag")
@@ -82,6 +88,7 @@ abstract class TagSpecBase extends FlatSpec {
     assertCompiles("owners: List[String @@ OwnerTag]")
     assertCompiles("owners: List[String @@ (UsernameTag with OwnerTag)]")
     assertDoesNotCompile("owners: String @@ AdminTag")
+    assertDoesNotCompile("owners: List[Int]")
 
     val admins = owners.+@@[AdminTag]
     assertCompiles("admins: List[String]")
@@ -106,8 +113,14 @@ abstract class TagSpecBase extends FlatSpec {
     val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
     val users = rawUsers @@@ Username
     val owners = users +@@ Owner
-    val admins = owners +@@ Admin
+    assertCompiles("owners: List[String]")
+    assertCompiles("owners: List[String @@ Username.Tag]")
+    assertCompiles("owners: List[String @@ Owner.Tag]")
+    assertCompiles("owners: List[String @@ (Username.Tag with Owner.Tag)]")
+    assertDoesNotCompile("owners: List[String @@ Admin.Tag]")
+    assertDoesNotCompile("owners: List[Int]")
 
+    val admins = owners +@@ Admin
     assertCompiles("admins: List[String]")
     assertCompiles("admins: List[String @@ Username.Tag]")
     assertCompiles("admins: List[String @@ Owner.Tag]")
@@ -136,6 +149,7 @@ abstract class TagSpecBase extends FlatSpec {
     assertCompiles("owners: List[Option[List[String @@ OwnerTag]]]")
     assertCompiles("owners: List[Option[List[String @@ (UsernameTag with OwnerTag)]]]")
     assertDoesNotCompile("owners: List[Option[String @@ AdminTag]]")
+    assertDoesNotCompile("owners: List[Int]")
 
     val admins = owners.+@@@[AdminTag]
     assertCompiles("admins: List[Option[List[String]]]")
@@ -160,8 +174,14 @@ abstract class TagSpecBase extends FlatSpec {
     val rawUsers = List(Some(List("scooper", "lhofstadter", "rkoothrappali")))
     val users = rawUsers @@@@ Username
     val owners = users +@@@ Owner
-    val admins = owners +@@@ Admin
+    assertCompiles("owners: List[Option[List[String]]]")
+    assertCompiles("owners: List[Option[List[String @@ Username.Tag]]]")
+    assertCompiles("owners: List[Option[List[String @@ Owner.Tag]]]")
+    assertCompiles("owners: List[Option[List[String @@ (Username.Tag with Owner.Tag)]]]")
+    assertDoesNotCompile("owners: List[Option[String @@ Admin.Tag]]")
+    assertDoesNotCompile("owners: List[Int]")
 
+    val admins = owners +@@@ Admin
     assertCompiles("admins: List[Option[List[String]]]")
     assertCompiles("admins: List[Option[List[String @@ Username.Tag]]]")
     assertCompiles("admins: List[Option[List[String @@ Owner.Tag]]]")
