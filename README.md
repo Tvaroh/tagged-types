@@ -17,6 +17,9 @@ Zero-dependency boilerplate-free tagged types for Scala.
          - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
      - [Note about implicit resolution](#note-about-implicit-resolution)
+   - [Integrating with libraries](#integrating-with-libraries)
+     - [Circe](#circe)
+     - [Slick](#slick)
 
 ## Usage
 
@@ -194,4 +197,46 @@ Implicit resolution won't work as it was before when using companion objects, so
 import username._
 // or import username.ordering
 // or import username.UsernameExtensions
+```
+
+## Integrating with libraries
+
+### Circe
+
+Helpers for defining Circe encoders/decoders.
+
+```scala
+import io.circe._
+import io.treev.tag._
+
+def taggedDecoder[T: Decoder, U]: Decoder[T @@ U] =
+  Decoder.instance(_.as[T].@@@[U])
+
+def taggedTypeDecoder[T: Decoder](taggedType: TaggedType[T]): Decoder[taggedType.Type] =
+  taggedDecoder[T, taggedType.Tag]
+
+def taggedEncoder[T: Encoder, U]: Encoder[T @@ U] =
+  Encoder[T].@@@[U]
+
+def taggedTypeEncoder[T: Encoder](taggedType: TaggedType[T]): Encoder[taggedType.Type] =
+  taggedEncoder[T, taggedType.Tag]
+```
+
+### Slick
+
+Helpers for defining Slick column types.
+
+```scala
+import io.circe._
+import scala.reflect.ClassTag
+import slickProfile.api._
+
+def taggedColumnType[T, U](implicit tColumnType: BaseColumnType[T],
+                                    clsTag: ClassTag[T @@ U]): BaseColumnType[T @@ U] =
+  MappedColumnType.base[T @@ U, T](identity, _.@@[U])
+
+def taggedTypeColumnType[T](taggedType: TaggedType[T])
+                           (implicit tColumnType: BaseColumnType[T],
+                                     clsTag: ClassTag[taggedType.Type]): BaseColumnType[taggedType.Type] =
+  taggedColumnType[T, taggedType.Tag]
 ```
