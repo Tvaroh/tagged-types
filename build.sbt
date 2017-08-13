@@ -1,7 +1,7 @@
 import sbt._
 
 name := "tagged-types-root"
-scalaVersion in ThisBuild := "2.12.2"
+scalaVersion in ThisBuild := "2.12.3"
 crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.11")
 scalacOptions in ThisBuild ++= Seq(
   "-deprecation",

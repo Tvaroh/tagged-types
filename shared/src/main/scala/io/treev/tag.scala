@@ -17,7 +17,7 @@ object tag {
     * @tparam R raw value type */
   trait TaggedType[R] {
     /** Tagged value tag. */
-    sealed trait Tag
+    type Tag = this.type
 
     /** Raw value type. */
     type Raw = R
@@ -131,7 +131,7 @@ object tag {
       type Raw
       type Result[U] = FF[Raw @@ U]
     }
-    trait LowPriorityUnwrap0 {
+    trait LowPriorityUnwrap {
       implicit def bottom[F[_], T]: Unwrap[F[T]] {
         type FF[S] = F[S]
         type Raw = T
@@ -140,7 +140,7 @@ object tag {
         type Raw = T
       }
     }
-    object Unwrap extends LowPriorityUnwrap0 {
+    object Unwrap extends LowPriorityUnwrap {
       implicit def nested[F[_], G](implicit unwrap: Unwrap[G]): Unwrap[F[G]] {
         type FF[S] = F[unwrap.FF[S]]
         type Raw = unwrap.Raw
@@ -176,7 +176,7 @@ object tag {
       type Tag
       type Result[V] = FF[Raw @@ (Tag with V)]
     }
-    trait LowPriorityUnwrap0 {
+    trait LowPriorityUnwrap {
       implicit def bottom[F[_], T, T1, U](implicit ev: T <:< (T1 @@ U)): Unwrap[F[T], T] {
         type FF[S] = F[S]
         type Raw = T1
@@ -187,7 +187,7 @@ object tag {
         type Tag = U
       }
     }
-    object Unwrap extends LowPriorityUnwrap0 {
+    object Unwrap extends LowPriorityUnwrap {
       implicit def nested[F[_], G, T](implicit unwrap: Unwrap[G, T]): Unwrap[F[G], T] {
         type FF[S] = F[unwrap.FF[S]]
         type Raw = unwrap.Raw
