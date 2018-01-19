@@ -1,8 +1,8 @@
 import sbt._
 
 name := "tagged-types-root"
-scalaVersion in ThisBuild := "2.12.3"
-crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.11")
+scalaVersion in ThisBuild := "2.12.4"
+crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.12")
 scalacOptions in ThisBuild ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
@@ -53,7 +53,7 @@ lazy val cross =
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
       homepage := Some(url("https://github.com/Treev-io/tagged-types")),
 
-      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.3" % Test
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.4" % Test
     )
 
 lazy val jvm = cross.jvm
