@@ -40,13 +40,13 @@ Artifacts are published for *Scala* / *Scala.js* `2.11` and `2.12`.
 ```scala
 import io.treev.tag._
 
-object username extends TaggedType[String]
+object Username extends TaggedType[String]
 ```
 
 It's helpful to define a type alias for convenience, e.g. in package object:
 
 ```scala
-object username extends TaggedType[String]
+object Username extends TaggedType[String]
 type Username = username.Type
 ```
 
@@ -57,13 +57,13 @@ type Username = username.Type
 * `Raw` type member to access raw type, e.g. to help with type inference where needed:
 
 ```scala
-object username extends TaggedType[String]
-type Username = username.Type
+object Username extends TaggedType[String]
+type Username = Username.Type
 
 case class User(name: Username)
 
-val users = List(User(username("scooper")))
-users.sortBy(_.name: username.Raw)
+val users = List(User(Username("scooper")))
+users.sortBy(_.name: Username.Raw)
 ```
 
 * `Type` type member to access tagged type.
@@ -83,13 +83,13 @@ sheldon: String @@ UsernameTag
 Or, if you have `TaggedType` instance:
 
 ```scala
-object username extends TaggedType[String]
+object Username extends TaggedType[String]
 
-val sheldon = "scooper" @@ username
-sheldon: String @@ username.Tag
-sheldon: username.Type
-// or "scooper" taggedWith username
-// or username("scooper")
+val sheldon = "scooper" @@ Username
+sheldon: String @@ Username.Tag
+sheldon: Username.Type
+// or "scooper" taggedWith Username
+// or Username("scooper")
 ```
 
 ##### Tagging container values
@@ -155,7 +155,7 @@ case class Username(value: String) extends AnyVal {
   def isValid: Boolean = !value.isEmpty
 }
 object Username {
-  val FieldName: String = "Username"
+  val FieldName: String = "username"
   
   implicit val ordering: Ordering[Username] = Ordering.by(_.value)
 }
@@ -164,13 +164,13 @@ object Username {
 Then, it's a matter of changing it to:
 
 ```scala
-object username extends TaggedType[String]
+object Username extends TaggedType[String]
 ```
 
 Any methods on original case class instance turn into implicit extensions:
 
 ```scala
-object username extends TaggedType[String] {
+object Username extends TaggedType[String] {
   implicit class UsernameExtensions(val value: Type) 
     extends AnyVal { // still good application of value classes
   
@@ -179,11 +179,11 @@ object username extends TaggedType[String] {
 }
 ```
 
-Any constants on original case class' companion object are merged into `username` object:
+Any constants on original case class' companion object are merged into `Username` object:
 
 ```scala
-object username extends TaggedType[String] {
-  val FieldName: String = "Username"
+object Username extends TaggedType[String] {
+  val FieldName: String = "username"
   
   implicit val ordering: Ordering[Type] = Ordering[String].@@@[Tag]
 }
@@ -194,9 +194,9 @@ object username extends TaggedType[String] {
 Implicit resolution won't work as it was before when using companion objects, so, to bring implicit `Ordering` instance or `UsernameExtensions` from above into scope, need to import it explicitly:
 
 ```scala
-import username._
-// or import username.ordering
-// or import username.UsernameExtensions
+import Username._
+// or import Username.ordering
+// or import Username.UsernameExtensions
 ```
 
 ## Integrating with libraries
