@@ -20,15 +20,9 @@ scalacOptions in ThisBuild ++= Seq(
   "-Ywarn-unused-import"
 )
 releaseCrossBuild := true
-
-lazy val root =
-  project.in(file("."))
-    .aggregate(jvm, js)
-    .settings(
-      publish := {},
-      publishLocal := {},
-      publishArtifact := false
-    )
+publishTo in ThisBuild := Some {
+  if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging
+}
 
 lazy val cross =
   crossProject(JSPlatform, JVMPlatform)
@@ -41,19 +35,18 @@ lazy val cross =
       releasePublishArtifactsAction := PgpKeys.publishSigned.value,
 
       publishMavenStyle := true,
-      publishTo := Some(if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging),
       pomIncludeRepository := (_ => false),
 
       licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause")),
       scmInfo := Some(
         ScmInfo(
-          url("https://github.com/Treev-io/tagged-types"),
-          "scm:git:git@github.com:Treev-io/tagged-types.git",
-          Some("scm:git:ssh://github.com:Treev-io/tagged-types.git")
+          url("https://github.com/Tvaroh/tagged-types"),
+          "scm:git:git@github.com:Tvaroh/tagged-types.git",
+          Some("scm:git:ssh://github.com:Tvaroh/tagged-types.git")
         )
       ),
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
-      homepage := Some(url("https://github.com/Treev-io/tagged-types")),
+      homepage := Some(url("https://github.com/Tvaroh/tagged-types")),
 
       libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.5" % Test
     )

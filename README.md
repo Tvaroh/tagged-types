@@ -1,6 +1,6 @@
 # tagged-types
 
-[![Build status](https://img.shields.io/travis/Treev-io/tagged-types/master.svg)](https://travis-ci.org/Treev-io/tagged-types)
+[![Build status](https://img.shields.io/travis/Tvaroh/tagged-types/master.svg)](https://travis-ci.org/Tvaroh/tagged-types)
 [![Maven Central](https://img.shields.io/maven-central/v/io.treev/tagged-types_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/io.treev/tagged-types_2.11)
 
 Zero-dependency boilerplate-free tagged types for Scala.
