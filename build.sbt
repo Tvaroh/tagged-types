@@ -1,7 +1,8 @@
 import sbt._
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "tagged-types-root"
-scalaVersion in ThisBuild := "2.12.4"
+scalaVersion in ThisBuild := "2.12.6"
 crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.12")
 scalacOptions in ThisBuild ++= Seq(
   "-deprecation",
@@ -30,7 +31,8 @@ lazy val root =
     )
 
 lazy val cross =
-  crossProject.in(file("."))
+  crossProject(JSPlatform, JVMPlatform)
+    .in(file("."))
     .settings(
       name := "tagged-types",
       organization := "io.treev",
@@ -53,7 +55,7 @@ lazy val cross =
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
       homepage := Some(url("https://github.com/Treev-io/tagged-types")),
 
-      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.4" % Test
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.5" % Test
     )
 
 lazy val jvm = cross.jvm

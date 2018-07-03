@@ -1,21 +1,15 @@
-package io.treev
-
 import scala.annotation.implicitNotFound
 
-/**
-  * Adapted from
-  * https://github.com/softwaremill/scala-common/blob/master/tagging/src/main/scala/com/softwaremill/tagging/package.scala
-  * with added tagging operators, function-first-style tagging, and explicit container-types tagging.
-  */
-object tag {
+package object taggedtypes {
 
-  type Tag[+T, +U] = { type Raw <: T; type Tag <: U }
-  type Tagged[+T, +U] = T with Tag[T, U]
-  type @@[+T, +U] = Tagged[T, U]
+  sealed trait Tag[T, +U] extends Any { type Raw = T }
+  type Tagged[T, +U] = T with Tag[T, U]
+  type @@[T, +U] = Tagged[T, U]
 
   /** Base tagged type trait.
     * @tparam R raw value type */
   trait TaggedType[R] {
+
     /** Tagged value tag. */
     type Tag = this.type
 
@@ -26,6 +20,9 @@ object tag {
 
     /** Create tagged value from raw value. */
     def apply(raw: Raw): Type = raw.@@[Tag]
+
+    implicit def ordering(implicit ordering: Ordering[Raw]): Ordering[Type] = cast(ordering)
+
   }
 
   /** Function-first-style tagging API.
@@ -51,6 +48,7 @@ object tag {
     def @@(taggedType: TaggedType[_]): T @@ taggedType.Tag = taggedWith[taggedType.Tag]
 
   }
+
   implicit class AndTaggingExtensions[T, U](val t: T @@ U) extends AnyVal {
 
     /** Tag tagged value with type `V`.
@@ -88,6 +86,7 @@ object tag {
     def @@@(taggedType: TaggedType[_]): F[T @@ taggedType.Tag] = taggedWithF[taggedType.Tag]
 
   }
+
   implicit class AndTaggingExtensionsF[F[_], T, U](val ft: F[T @@ U]) extends AnyVal {
 
     /** Tag tagged intra-container value with type `U`.
@@ -124,6 +123,7 @@ object tag {
     /** Synonym operator for `taggedWithG`. */
     def @@@@(taggedType: TaggedType[_])(implicit unwrap: Unwrap[G]): unwrap.Result[taggedType.Tag] = cast(g)
   }
+
   object TaggingExtensionsG {
     @implicitNotFound("Cannot prove that ${F} is a container stack, like Option[List[Int]]")
     trait Unwrap[F] {
@@ -168,6 +168,7 @@ object tag {
     /** Synonym operator for `andTaggedWithG`. */
     def +@@@(taggedType: TaggedType[_])(implicit unwrap: Unwrap[G, T]): unwrap.Result[taggedType.Tag] = cast(g)
   }
+
   object AndTaggingExtensionsG {
     @implicitNotFound("Cannot prove that ${F} is a container stack holding a tagged value, like Option[List[Int @@ Tag]]")
     trait Unwrap[F, T] {

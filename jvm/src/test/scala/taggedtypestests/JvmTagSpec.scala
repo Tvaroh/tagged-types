@@ -1,3 +1,3 @@
-package io.treev
+package taggedtypestests
 
 class JvmTagSpec extends TagSpecBase

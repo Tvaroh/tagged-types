@@ -16,7 +16,6 @@ Zero-dependency boilerplate-free tagged types for Scala.
          - [Tagging arbitrarily nested container values](#tagging-arbitrarily-nested-container-values)
          - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
-     - [Note about implicit resolution](#note-about-implicit-resolution)
    - [Integrating with libraries](#integrating-with-libraries)
      - [Circe](#circe)
      - [Slick](#slick)
@@ -28,7 +27,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
 Add the following to your `build.sbt` (replace `%%` with `%%%` for *Scala.js*):
 
 ```scala
-libraryDependencies += "io.treev" %% "tagged-types" % "1.4"
+libraryDependencies += "io.treev" %% "tagged-types" % "2.0"
 ```
 
 Artifacts are published for *Scala* / *Scala.js* `2.11` and `2.12`.
@@ -38,7 +37,7 @@ Artifacts are published for *Scala* / *Scala.js* `2.11` and `2.12`.
 #### Defining tagged types
 
 ```scala
-import io.treev.tag._
+import taggedtypes._
 
 object Username extends TaggedType[String]
 ```
@@ -156,8 +155,6 @@ case class Username(value: String) extends AnyVal {
 }
 object Username {
   val FieldName: String = "username"
-  
-  implicit val ordering: Ordering[Username] = Ordering.by(_.value)
 }
 ```
 
@@ -171,9 +168,7 @@ Any methods on original case class instance turn into implicit extensions:
 
 ```scala
 object Username extends TaggedType[String] {
-  implicit class UsernameExtensions(val value: Type) 
-    extends AnyVal { // still good application of value classes
-  
+  implicit class UsernameExtensions(val value: Type) extends AnyVal {
     def isValid: Boolean = !value.isEmpty
   }
 }
@@ -184,19 +179,7 @@ Any constants on original case class' companion object are merged into `Username
 ```scala
 object Username extends TaggedType[String] {
   val FieldName: String = "username"
-  
-  implicit val ordering: Ordering[Type] = Ordering[String].@@@[Tag]
 }
-```
-
-### Note about implicit resolution
-
-Implicit resolution won't work as it was before when using companion objects, so, to bring implicit `Ordering` instance or `UsernameExtensions` from above into scope, need to import it explicitly:
-
-```scala
-import Username._
-// or import Username.ordering
-// or import Username.UsernameExtensions
 ```
 
 ## Integrating with libraries
@@ -207,7 +190,7 @@ Helpers for defining Circe encoders/decoders.
 
 ```scala
 import io.circe._
-import io.treev.tag._
+import taggedtypes._
 
 def taggedDecoder[T: Decoder, U]: Decoder[T @@ U] =
   Decoder.instance(_.as[T].@@@[U])

@@ -1,9 +1,9 @@
-package io.treev
+package taggedtypestests
 
-import io.treev.tag._
-import org.scalatest.FlatSpec
+import org.scalatest.{FlatSpec, Matchers}
+import taggedtypes._
 
-abstract class TagSpecBase extends FlatSpec {
+abstract class TagSpecBase extends FlatSpec with Matchers {
 
   sealed trait UsernameTag
   sealed trait OwnerTag
@@ -190,6 +190,27 @@ abstract class TagSpecBase extends FlatSpec {
     assertCompiles("admins: List[Option[List[String @@ (Username.Tag with Admin.Tag)]]]")
     assertCompiles("admins: List[Option[List[String @@ (Owner.Tag with Admin.Tag)]]]")
     assertCompiles("admins: List[Option[List[String @@ (Username.Tag with Owner.Tag with Admin.Tag)]]]")
+  }
+
+  // aux
+
+  it should "pick ordering automatically" in {
+    val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
+    val users = rawUsers @@@ Username
+    users.sorted should be (rawUsers.sorted)
+  }
+
+  it should "pick extension methods automatically" in {
+    assertCompiles {
+      """
+        |object Username extends TaggedType[String] {
+        |  implicit class UsernameExtensions(val username: Type) {
+        |    def reverse: Type = apply(username.reverse)
+        |  }
+        |}
+        |Username("scooper").reverse
+      """.stripMargin
+    }
   }
 
 }
