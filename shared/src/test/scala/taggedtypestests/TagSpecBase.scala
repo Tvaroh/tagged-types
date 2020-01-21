@@ -1,9 +1,10 @@
 package taggedtypestests
 
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.should.Matchers
 import taggedtypes._
 
-abstract class TagSpecBase extends FlatSpec with Matchers {
+abstract class TagSpecBase extends AnyFlatSpec with Matchers {
 
   sealed trait UsernameTag
   sealed trait OwnerTag
@@ -20,6 +21,13 @@ abstract class TagSpecBase extends FlatSpec with Matchers {
     assertCompiles("scooper: String")
     assertCompiles("scooper: String @@ UsernameTag")
     assertDoesNotCompile("scooper: String @@ OwnerTag")
+  }
+
+  it should "support value un-tagging" in {
+    val scooper = "scooper".@@[UsernameTag]
+    assertCompiles("scooper.unTagged: String")
+    assertCompiles("(scooper.-@): String")
+    assertDoesNotCompile("scooper.unTagged: String @@ UsernameTag")
   }
 
   it should "support value multi-tagging" in {
