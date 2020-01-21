@@ -3,9 +3,9 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 import xerial.sbt.Sonatype._
 
 name := "tagged-types-root"
-scalaVersion in ThisBuild := "2.13.1"
-crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.12.10")
-scalacOptions in ThisBuild ++= Seq(
+ThisBuild / scalaVersion  := "2.13.1"
+ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.10")
+ThisBuild / scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
   "-feature",
@@ -18,9 +18,10 @@ scalacOptions in ThisBuild ++= Seq(
   "-Ywarn-value-discard",
   "-Ywarn-unused:imports"
 )
+sourcesInBase := false
+sonatypeProfileName := "io.treev"
+skip in publish := true
 releaseCrossBuild := true
-ThisBuild / publishTo := sonatypePublishToBundle.value
-ThisBuild / sonatypeProfileName := "io.treev"
 
 lazy val cross =
   crossProject(JSPlatform, JVMPlatform)
@@ -33,6 +34,7 @@ lazy val cross =
       releasePublishArtifactsAction := PgpKeys.publishSigned.value,
 
       publishMavenStyle := true,
+      publishTo := sonatypePublishToBundle.value,
       sonatypeProjectHosting := Some(GitHubHosting("Tvaroh", "tagged-types", "Alexander Semenov", "tvaroh@icloud.com")),
 
       licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause")),
