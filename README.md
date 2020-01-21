@@ -1,7 +1,7 @@
 # tagged-types
 
 [![Build status](https://img.shields.io/travis/Tvaroh/tagged-types/master.svg)](https://travis-ci.org/Tvaroh/tagged-types)
-[![Maven Central](https://img.shields.io/maven-central/v/io.treev/tagged-types_2.11.svg)](https://maven-badges.herokuapp.com/maven-central/io.treev/tagged-types_2.11)
+[![Maven Central](https://img.shields.io/maven-central/v/io.treev/tagged-types_2.13.svg)](https://maven-badges.herokuapp.com/maven-central/io.treev/tagged-types_2.13)
 
 Zero-dependency boilerplate-free tagged types for Scala.
 
@@ -10,11 +10,11 @@ Zero-dependency boilerplate-free tagged types for Scala.
      - [`sbt`](#sbt)
      - [API](#api)
        - [Defining tagged types](#defining-tagged-types)
-       - [Tagging](#tagging)
-         - [Tagging values](#tagging-values)
-         - [Tagging container values](#tagging-container-values)
-         - [Tagging arbitrarily nested container values](#tagging-arbitrarily-nested-container-values)
-         - [Adding more tags](#adding-more-tags)
+       - [Tagging values](#tagging-values)
+       - [Tagging container values](#tagging-container-values)
+       - [Tagging arbitrarily nested container values](#tagging-arbitrarily-nested-container-values)
+       - [Un-tagging](#un-tagging)
+       - [Adding more tags](#adding-more-tags)
    - [Migrating from value classes](#migrating-from-value-classes)
    - [Integrating with libraries](#integrating-with-libraries)
      - [Circe](#circe)
@@ -27,10 +27,10 @@ Zero-dependency boilerplate-free tagged types for Scala.
 Add the following to your `build.sbt` (replace `%%` with `%%%` for *Scala.js*):
 
 ```scala
-libraryDependencies += "io.treev" %% "tagged-types" % "2.0"
+libraryDependencies += "io.treev" %% "tagged-types" % "3.2"
 ```
 
-Artifacts are published for *Scala* / *Scala.js* `2.11` and `2.12`.
+Artifacts are published for *Scala* `2.12`/`2.13` and *Scala.js* `1.0-RC2`. Use `2.0` for *Scala* `2.11`/`2.12` and *Scala.js* `0.6`.
 
 ### API
 
@@ -67,9 +67,7 @@ users.sortBy(_.name: Username.Raw)
 
 * `Type` type member to access tagged type.
 
-#### Tagging
-
-##### Tagging values
+#### Tagging values
 
 ```scala
 sealed trait UsernameTag
@@ -91,7 +89,7 @@ sheldon: Username.Type
 // or Username("scooper")
 ```
 
-##### Tagging container values
+#### Tagging container values
 
 ```scala
 val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
@@ -102,7 +100,7 @@ users: List[String @@ UsernameTag]
 
 Can also tag using `TaggedType` instance as above.
 
-##### Tagging arbitrarily nested container values
+#### Tagging arbitrarily nested container values
 
 ```scala
 import scala.util.Try
@@ -114,7 +112,27 @@ taggedArbitrarilyNested: Option[List[Try[String @@ UsernameTag]]]
 
 Can also tag using `TaggedType` instance as above.
 
-##### Adding more tags
+#### Un-tagging
+
+Immediate value:
+
+```scala
+val rawSheldon: String = sheldon.-@ // or sheldon.unTagged
+````
+
+Container value:
+
+```scala
+val rawUsers: List[String] = users.-@@ // or users.unTaggedF
+````
+
+Arbitrarily nested container value:
+
+```scala
+val rawArbitrarilyNested: Option[List[Try[String @@ UsernameTag]]] = taggedArbitrarilyNested.-@@@@ // or taggedArbitrarilyNested.unTaggedG
+````
+
+#### Adding more tags
 
 Immediate value:
 
