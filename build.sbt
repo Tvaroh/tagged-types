@@ -2,8 +2,8 @@ import sbt._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 name := "tagged-types-root"
-scalaVersion in ThisBuild := "2.12.6"
-crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.11.12")
+scalaVersion in ThisBuild := "2.13.1"
+crossScalaVersions in ThisBuild := Seq(scalaVersion.value, "2.12.10")
 scalacOptions in ThisBuild ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
@@ -13,11 +13,9 @@ scalacOptions in ThisBuild ++= Seq(
   "-language:higherKinds",
   "-language:implicitConversions",
   "-Xfatal-warnings",
-  "-Yno-adapted-args",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
-  "-Xfuture",
-  "-Ywarn-unused-import"
+  "-Ywarn-unused:imports"
 )
 releaseCrossBuild := true
 publishTo in ThisBuild := Some {
@@ -48,7 +46,7 @@ lazy val cross =
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
       homepage := Some(url("https://github.com/Tvaroh/tagged-types")),
 
-      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.0.5" % Test
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
     )
 
 lazy val jvm = cross.jvm

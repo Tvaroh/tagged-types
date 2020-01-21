@@ -37,7 +37,7 @@ package object taggedtypes {
       * @return value tagged with `U` */
     def taggedWith[U]: T @@ U = cast(t)
     /** Synonym operator for `taggedWith`. */
-    def @@[U]: T @@ U = taggedWith[U]
+    def @@[U]: T @@ U = cast(t)
 
     /** Tag using `TaggedType` instance.
       * Allows for `String @@ MyTaggedType` syntax.
@@ -56,7 +56,7 @@ package object taggedtypes {
       * @return value tagged with both `U` and `V` */
     def andTaggedWith[V]: T @@ (U with V) = cast(t)
     /** Synonym operator for `andTaggedWith`. */
-    def +@[V]: T @@ (U with V) = andTaggedWith[V]
+    def +@[V]: T @@ (U with V) = cast(t)
 
     /** Tag tagged value using `TaggedType` instance.
       * Allows for `String +@ MyTaggedType` syntax.
@@ -68,6 +68,16 @@ package object taggedtypes {
 
   }
 
+  implicit class UnTaggingExtensions[T, U](val t: T @@ U) extends AnyVal {
+
+    /** Remove tag `U`.
+      * @return raw `T` value */
+    def unTagged: T = t
+    /** Synonym operator for `unTagged`. */
+    def -@ : T = t
+
+  }
+
   implicit class TaggingExtensionsF[F[_], T](val ft: F[T]) extends AnyVal {
 
     /** Tag intra-container value with type `U`.
@@ -75,7 +85,7 @@ package object taggedtypes {
       * @return container with nested value tagged with `U` */
     def taggedWithF[U]: F[T @@ U] = cast(ft)
     /** Synonym operator for `taggedWithF`. */
-    def @@@[U]: F[T @@ U] = taggedWithF[U]
+    def @@@[U]: F[T @@ U] = cast(ft)
 
     /** Tag intra-container value using `TaggedType` instance.
       * Allows for `List(...) @@ MyTaggedType` syntax.
@@ -94,7 +104,7 @@ package object taggedtypes {
       * @return container with nested value tagged with both `U` and `V` */
     def andTaggedWithF[V]: F[T @@ (U with V)] = cast(ft)
     /** Synonym operator for `andTaggedWithF`. */
-    def +@@[V]: F[T @@ (U with V)] = andTaggedWithF[V]
+    def +@@[V]: F[T @@ (U with V)] = cast(ft)
 
     /** Tag tagged intra-container value using `TaggedType` instance.
       * Allows for `List(...) +@@ MyTaggedType` syntax.
@@ -201,6 +211,7 @@ package object taggedtypes {
     }
   }
 
+  @inline
   private def cast[T, V](v: T): V = v.asInstanceOf[V]
 
 }
