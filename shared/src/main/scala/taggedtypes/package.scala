@@ -49,6 +49,16 @@ package object taggedtypes {
 
   }
 
+  implicit class UnTaggingExtensions[T](val t: T @@ _) extends AnyVal {
+
+    /** Remove tag.
+      * @return raw value */
+    def unTagged: T = t
+    /** Synonym operator for `unTagged`. */
+    def -@ : T = t
+
+  }
+
   implicit class AndTaggingExtensions[T, U](val t: T @@ U) extends AnyVal {
 
     /** Tag tagged value with type `V`.
@@ -68,16 +78,6 @@ package object taggedtypes {
 
   }
 
-  implicit class UnTaggingExtensions[T, U](val t: T @@ U) extends AnyVal {
-
-    /** Remove tag `U`.
-      * @return raw `T` value */
-    def unTagged: T = t
-    /** Synonym operator for `unTagged`. */
-    def -@ : T = t
-
-  }
-
   implicit class TaggingExtensionsF[F[_], T](val ft: F[T]) extends AnyVal {
 
     /** Tag intra-container value with type `U`.
@@ -94,6 +94,16 @@ package object taggedtypes {
     def taggedWithF(taggedType: TaggedType[_]): F[T @@ taggedType.Tag] = taggedWithF[taggedType.Tag]
     /** Synonym operator for `taggedWith`. */
     def @@@(taggedType: TaggedType[_]): F[T @@ taggedType.Tag] = taggedWithF[taggedType.Tag]
+
+  }
+
+  implicit class UnTaggingExtensionsF[F[_], T](val ft: F[T @@ _]) extends AnyVal {
+
+    /** Remove tag.
+      * @return raw intra-container value */
+    def unTaggedF: F[T] = cast(ft)
+    /** Synonym operator for `unTaggedF`. */
+    def -@@ : F[T] = cast(ft)
 
   }
 
@@ -157,6 +167,49 @@ package object taggedtypes {
       } = new Unwrap[F[G]] {
         type FF[S] = F[unwrap.FF[S]]
         type Raw = unwrap.Raw
+      }
+    }
+  }
+
+  implicit class UnTaggingExtensionsG[G](val g: G) extends AnyVal {
+    import UnTaggingExtensionsG._
+
+    /** Remove tag.
+      * @return raw arbitrarily nested container value */
+    def unTaggedG(implicit unwrap: Unwrap[G]): unwrap.Result = cast(g)
+    /** Synonym operator for `unTaggedG`. */
+    def -@@@@(implicit unwrap: Unwrap[G]): unwrap.Result = cast(g)
+
+  }
+
+  object UnTaggingExtensionsG {
+    @implicitNotFound("Cannot prove that ${F} is a container stack holding a tagged value, like Option[List[Int @@ Tag]]")
+    trait Unwrap[F] {
+      type FF[_]
+      type Raw
+      type Tag
+      type Result = FF[Raw]
+    }
+    trait LowPriorityUnwrap {
+      implicit def bottom[F[_], T, T1, U](implicit ev: T <:< (T1 @@ U)): Unwrap[F[T]] {
+        type FF[S] = F[S]
+        type Raw = T1
+        type Tag = U
+      } = new Unwrap[F[T]] {
+        type FF[S] = F[S]
+        type Raw = T1
+        type Tag = U
+      }
+    }
+    object Unwrap extends LowPriorityUnwrap {
+      implicit def nested[F[_], G](implicit unwrap: Unwrap[G]): Unwrap[F[G]] {
+        type FF[S] = F[unwrap.FF[S]]
+        type Raw = unwrap.Raw
+        type Tag = unwrap.Tag
+      } = new Unwrap[F[G]] {
+        type FF[S] = F[unwrap.FF[S]]
+        type Raw = unwrap.Raw
+        type Tag = unwrap.Tag
       }
     }
   }

@@ -87,6 +87,14 @@ abstract class TagSpecBase extends AnyFlatSpec with Matchers {
     assertDoesNotCompile("users: List[String @@ OwnerTag]")
   }
 
+  it should "support intra-container value un-tagging" in {
+    val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
+    val users = rawUsers.@@@[UsernameTag]
+    assertCompiles("users.unTaggedF: List[String]")
+    assertCompiles("(users.-@@): List[String]")
+    assertDoesNotCompile("users.unTaggedF: List[String @@ OwnerTag]")
+  }
+
   it should "support intra-container value multi-tagging" in {
     val rawUsers = List("scooper", "lhofstadter", "rkoothrappali")
     val users = rawUsers.@@@[UsernameTag]
@@ -146,6 +154,15 @@ abstract class TagSpecBase extends AnyFlatSpec with Matchers {
     val users = rawUsers.@@@@[UsernameTag]
     assertCompiles("users: List[Option[List[String @@ UsernameTag]]]")
     assertDoesNotCompile("users: List[Option[List[String @@ OwnerTag]]]")
+  }
+
+  it should "support arbitrarily nested intra-container value un-tagging" in {
+    val rawUsers = List(Some(List("scooper", "lhofstadter", "rkoothrappali")))
+    val users = rawUsers.@@@@[UsernameTag]
+    val owners = users.+@@@[OwnerTag]
+    assertCompiles("owners.unTaggedG: List[Option[List[String]]]")
+    assertCompiles("(owners.-@@@@): List[Option[List[String]]]")
+    assertDoesNotCompile("owners.unTaggedG: List[Option[List[String @@ OwnerTag]]]")
   }
 
   it should "support arbitrarily nested intra-container value multi-tagging" in {
