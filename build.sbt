@@ -1,5 +1,6 @@
 import sbt._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
+import xerial.sbt.Sonatype._
 
 name := "tagged-types-root"
 scalaVersion in ThisBuild := "2.13.1"
@@ -18,9 +19,8 @@ scalacOptions in ThisBuild ++= Seq(
   "-Ywarn-unused:imports"
 )
 releaseCrossBuild := true
-publishTo in ThisBuild := Some {
-  if (isSnapshot.value) Opts.resolver.sonatypeSnapshots else Opts.resolver.sonatypeStaging
-}
+ThisBuild / publishTo := sonatypePublishToBundle.value
+ThisBuild / sonatypeProfileName := "io.treev"
 
 lazy val cross =
   crossProject(JSPlatform, JVMPlatform)
@@ -33,9 +33,10 @@ lazy val cross =
       releasePublishArtifactsAction := PgpKeys.publishSigned.value,
 
       publishMavenStyle := true,
-      pomIncludeRepository := (_ => false),
+      sonatypeProjectHosting := Some(GitHubHosting("Tvaroh", "tagged-types", "Alexander Semenov", "tvaroh@icloud.com")),
 
       licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause")),
+      homepage := Some(url("https://github.com/Tvaroh/tagged-types")),
       scmInfo := Some(
         ScmInfo(
           url("https://github.com/Tvaroh/tagged-types"),
@@ -44,7 +45,6 @@ lazy val cross =
         )
       ),
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
-      homepage := Some(url("https://github.com/Tvaroh/tagged-types")),
 
       libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
     )
