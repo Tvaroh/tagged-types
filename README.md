@@ -46,7 +46,7 @@ It's helpful to define a type alias for convenience, e.g. in package object:
 
 ```scala
 object Username extends TaggedType[String]
-type Username = username.Type
+type Username = Username.Type
 ```
 
 `TaggedType` provides the following members:
