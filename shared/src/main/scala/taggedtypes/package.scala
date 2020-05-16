@@ -6,6 +6,14 @@ package object taggedtypes {
   type Tagged[T, +U] = T with Tag[T, U]
   type @@[T, +U] = Tagged[T, U]
 
+  sealed trait Auto
+
+  object auto {
+
+    implicit def auto: Auto = null
+
+  }
+
   /** Base tagged type trait.
     * @tparam R raw value type */
   trait TaggedType[R] {
@@ -19,9 +27,11 @@ package object taggedtypes {
     type Type = Raw @@ Tag
 
     /** Create tagged value from raw value. */
-    def apply(raw: Raw): Type = raw.@@[Tag]
+    def apply(raw: Raw): Type = cast(raw)
 
     implicit def ordering(implicit ordering: Ordering[Raw]): Ordering[Type] = cast(ordering)
+
+    implicit def auto(raw: Raw)(implicit auto: Auto): Type = cast(raw)
 
   }
 
