@@ -11,8 +11,13 @@ abstract class TagSpecBase extends AnyFlatSpec with Matchers {
   sealed trait AdminTag
 
   object Username extends TaggedType[String]
+  type Username = Username.Type
+
   object Owner extends TaggedType[String]
+  type Owner = Owner.Type
+
   object Admin extends TaggedType[String]
+  type Admin = Admin.Type
 
   // value tagging
 
@@ -215,6 +220,13 @@ abstract class TagSpecBase extends AnyFlatSpec with Matchers {
     assertCompiles("admins: List[Option[List[String @@ (Username.Tag with Admin.Tag)]]]")
     assertCompiles("admins: List[Option[List[String @@ (Owner.Tag with Admin.Tag)]]]")
     assertCompiles("admins: List[Option[List[String @@ (Username.Tag with Owner.Tag with Admin.Tag)]]]")
+  }
+
+  // auto-tagging
+
+  it should "support auto-tagging" in {
+    assertDoesNotCompile("val sheldon: Username = \"\"")
+    assertCompiles("import taggedtypes.auto._; val sheldon: Username = \"\"")
   }
 
   // aux
