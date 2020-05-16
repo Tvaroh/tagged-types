@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 import xerial.sbt.Sonatype._
 
 name := "tagged-types-root"
-ThisBuild / scalaVersion  := "2.13.1"
+ThisBuild / scalaVersion  := "2.13.2"
 ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.10")
 ThisBuild / scalacOptions ++= Seq(
   "-deprecation",
@@ -48,7 +48,7 @@ lazy val cross =
       ),
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
 
-      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test
     )
 
 lazy val jvm = cross.jvm
