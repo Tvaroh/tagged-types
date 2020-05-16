@@ -1,8 +1,10 @@
 import sbt._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
 import xerial.sbt.Sonatype._
+import ReleaseTransformations._
 
 name := "tagged-types-root"
+ThisBuild / organization := "io.treev"
 ThisBuild / scalaVersion  := "2.13.2"
 ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.10")
 ThisBuild / scalacOptions ++= Seq(
@@ -19,40 +21,40 @@ ThisBuild / scalacOptions ++= Seq(
   "-Ywarn-unused:imports"
 )
 sourcesInBase := false
-sonatypeProfileName := "io.treev"
 skip in publish := true
 
-import ReleaseTransformations._
+val publishSettings = Seq(
+  sonatypeProfileName := "io.treev",
+  publishMavenStyle := true,
+  publishTo := sonatypePublishToBundle.value,
+  sonatypeProjectHosting := Some(GitHubHosting("Tvaroh", "tagged-types", "Alexander Semenov", "tvaroh@icloud.com")),
 
-releaseCrossBuild := true
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  releaseStepCommandAndRemaining("+publishSigned"),
-  releaseStepCommand("sonatypeBundleRelease"),
-  setNextVersion,
-  commitNextVersion,
-  pushChanges
+  releaseCrossBuild := true,
+  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
+  releaseProcess :=
+    Seq[ReleaseStep](
+      checkSnapshotDependencies,
+      inquireVersions,
+      runClean,
+      runTest,
+      setReleaseVersion,
+      commitReleaseVersion,
+      tagRelease,
+      releaseStepCommandAndRemaining("+publishSigned"),
+      releaseStepCommand("sonatypeBundleRelease"),
+      setNextVersion,
+      commitNextVersion,
+      pushChanges
+    )
 )
 
 lazy val cross =
   crossProject(JSPlatform, JVMPlatform)
     .in(file("."))
+    .settings(publishSettings)
     .settings(
       name := "tagged-types",
-      organization := "io.treev",
       description := "Zero-dependency boilerplate-free tagged types for Scala",
-
-      releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-
-      publishMavenStyle := true,
-      publishTo := sonatypePublishToBundle.value,
-      sonatypeProjectHosting := Some(GitHubHosting("Tvaroh", "tagged-types", "Alexander Semenov", "tvaroh@icloud.com")),
 
       licenses += ("BSD New", url("https://opensource.org/licenses/BSD-3-Clause")),
       homepage := Some(url("https://github.com/Tvaroh/tagged-types")),
