@@ -15,6 +15,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
        - [Tagging arbitrarily nested container values](#tagging-arbitrarily-nested-container-values)
        - [Un-tagging](#un-tagging)
        - [Adding more tags](#adding-more-tags)
+       - [Auto tagging](#auto-tagging)
    - [Migrating from value classes](#migrating-from-value-classes)
    - [Integrating with libraries](#integrating-with-libraries)
      - [Circe](#circe)
@@ -162,6 +163,16 @@ owners: Option[List[Try[String @@ (UsernameTag with OwnerTag)]]]
 ```
 
 Can also tag using `TaggedType` instance as above.
+
+#### Auto tagging
+
+Sometimes it's convenient to automatically convert raw values into tagged ones, e.g. in REPL or when integrating with external APIs. To achieve this, an `import taggedtypes.auto._` is required:
+
+```scala
+import taggedtypes.auto._
+
+val sheldon: Username = "scooper"
+```
 
 ## Migrating from value classes
 
