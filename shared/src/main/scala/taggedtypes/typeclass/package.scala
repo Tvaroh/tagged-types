@@ -1,3 +1,3 @@
 package taggedtypes
 
-package object typeclass extends AnyTypeclassTaggingCompat
+package object typeclass extends TypeclassTagging

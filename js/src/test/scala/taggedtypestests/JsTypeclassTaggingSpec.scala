@@ -1,0 +1,3 @@
+package taggedtypestests
+
+class JsTypeclassTaggingSpec extends TypeclassTaggingSpecBase

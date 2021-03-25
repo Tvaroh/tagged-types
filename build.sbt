@@ -5,8 +5,8 @@ import ReleaseTransformations._
 
 name := "tagged-types-root"
 ThisBuild / organization := "io.treev"
-ThisBuild / scalaVersion  := "2.13.2"
-ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.10")
+ThisBuild / scalaVersion  := "2.13.4"
+ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.13")
 ThisBuild / scalacOptions ++= Seq(
   "-deprecation",
   "-encoding", "UTF-8",
@@ -67,7 +67,7 @@ lazy val cross =
       ),
       developers += Developer("Tvaroh", "Alexander Semenov", "bohtvaroh@gmail.com", url("https://github.com/Tvaroh")),
 
-      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.2" % Test
+      libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.6" % Test
     )
 
 lazy val jvm = cross.jvm
