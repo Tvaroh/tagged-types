@@ -1,0 +1,3 @@
+package taggedtypes
+
+package object typeclass extends AnyTypeclassTaggingCompat
