@@ -5,7 +5,7 @@ import ReleaseTransformations._
 
 name := "tagged-types-root"
 ThisBuild / organization := "io.treev"
-ThisBuild / scalaVersion  := "2.13.4"
+ThisBuild / scalaVersion  := "2.13.5"
 ThisBuild / crossScalaVersions := Seq(scalaVersion.value, "2.12.13")
 ThisBuild / scalacOptions ++= Seq(
   "-deprecation",

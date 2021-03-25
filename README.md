@@ -226,7 +226,7 @@ object Username extends TaggedType[String] {
 
 ### Circe
 
-Helpers for defining Circe encoders/decoders.
+Helpers for manually lifting Circe encoders/decoders.
 
 ```scala
 import io.circe._
@@ -247,7 +247,7 @@ def taggedTypeEncoder[T: Encoder](taggedType: TaggedType[T]): Encoder[taggedType
 
 ### Slick
 
-Helpers for defining Slick column types.
+Helpers for manually lifting Slick column types.
 
 ```scala
 import io.circe._
