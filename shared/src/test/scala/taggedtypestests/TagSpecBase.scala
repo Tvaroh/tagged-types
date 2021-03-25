@@ -229,6 +229,21 @@ abstract class TagSpecBase extends AnyFlatSpec with Matchers {
     assertCompiles("import taggedtypes.auto._; val sheldon: Username = \"\"")
   }
 
+  // typeclass auto-tagging
+
+  it should "support typeclass auto-tagging" in {
+    trait Typeclass[T]
+
+    object Typeclass {
+      implicit val stringInstance: Typeclass[String] = new Typeclass[String] {}
+
+      def apply[T](implicit typeclass: Typeclass[T]): Typeclass[T] = typeclass
+    }
+
+    assertDoesNotCompile("Typeclass[Username]")
+    assertCompiles("import taggedtypes.auto.typeclass._; Typeclass[Username]")
+  }
+
   // aux
 
   it should "pick ordering automatically" in {

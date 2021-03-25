@@ -12,6 +12,13 @@ package object taggedtypes {
 
     implicit def auto: Auto = null
 
+    object typeclass {
+
+      implicit def liftAnyTypeclass[Typeclass[_], T, Tag](implicit tc: Typeclass[T]): Typeclass[T @@ Tag] =
+        tc.asInstanceOf[Typeclass[T @@ Tag]]
+
+    }
+
   }
 
   /** Base tagged type trait.

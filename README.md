@@ -16,6 +16,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
        - [Un-tagging](#un-tagging)
        - [Adding more tags](#adding-more-tags)
        - [Auto tagging](#auto-tagging)
+       - [Typeclass auto tagging](#typeclass-auto-tagging)
    - [Migrating from value classes](#migrating-from-value-classes)
    - [Integrating with libraries](#integrating-with-libraries)
      - [Circe](#circe)
@@ -28,10 +29,10 @@ Zero-dependency boilerplate-free tagged types for Scala.
 Add the following to your `build.sbt` (replace `%%` with `%%%` for *Scala.js*):
 
 ```scala
-libraryDependencies += "io.treev" %% "tagged-types" % "3.2"
+libraryDependencies += "io.treev" %% "tagged-types" % "3.6"
 ```
 
-Artifacts are published for *Scala* `2.12`/`2.13` and *Scala.js* `1.0-RC2`. Use `2.0` for *Scala* `2.11`/`2.12` and *Scala.js* `0.6`.
+Artifacts are published for *Scala* `2.12`/`2.13` and *Scala.js* `1.5`.
 
 ### API
 
@@ -172,6 +173,16 @@ Sometimes it's convenient to automatically convert raw values into tagged ones, 
 import taggedtypes.auto._
 
 val sheldon: Username = "scooper"
+```
+
+#### Typeclass auto tagging
+
+To automatically lift a raw value typeclass into a tagged one, an `import taggedtypes.auto.typeclass._` import is required:
+
+```scala
+import taggedtypes.auto.typeclass._
+
+implicitly[Typeclass[Username]]
 ```
 
 ## Migrating from value classes

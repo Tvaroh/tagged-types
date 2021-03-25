@@ -1,3 +1,0 @@
-package taggedtypestests
-
-class JvmTypeclassTaggingSpec extends TypeclassTaggingSpecBase
