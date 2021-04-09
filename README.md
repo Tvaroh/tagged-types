@@ -29,7 +29,7 @@ Zero-dependency boilerplate-free tagged types for Scala.
 Add the following to your `build.sbt` (replace `%%` with `%%%` for *Scala.js*):
 
 ```scala
-libraryDependencies += "io.treev" %% "tagged-types" % "3.6.0"
+libraryDependencies += "io.treev" %% "tagged-types" % "3.6.1"
 ```
 
 Artifacts are published for *Scala* `2.12`/`2.13` and *Scala.js* `1.5`.
